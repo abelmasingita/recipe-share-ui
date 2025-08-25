@@ -30,41 +30,70 @@ export function RecipeForm({ initial, onSubmit, submitLabel = 'Save' }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className='p-6 space-y-4'>
-      {error && <p className='text-red-600'>{error}</p>}
+    <form
+      onSubmit={handleSubmit}
+      className='w-full max-w-2xl p-8 rounded-2xl bg-gray-800/60 backdrop-blur-xl shadow-2xl border border-gray-700/50 space-y-6'
+    >
+      {error && (
+        <p className='text-red-400 bg-red-900/30 p-3 rounded-lg border border-red-500/30'>
+          {error}
+        </p>
+      )}
+
+      {/* Title */}
       <input
         type='text'
-        placeholder='Title'
-        className='border p-2 w-full'
+        placeholder='Recipe Title'
+        className='w-full px-4 py-3 rounded-xl bg-gray-900/70 border border-gray-700 
+                   focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/40 
+                   outline-none transition'
         value={form.title}
         onChange={(e) => setForm({ ...form, title: e.target.value })}
       />
+
+      {/* Ingredients */}
       <textarea
-        placeholder='Ingredients'
-        className='border p-2 w-full'
+        placeholder='Ingredients (comma separated)'
+        rows={4}
+        className='w-full px-4 py-3 rounded-xl bg-gray-900/70 border border-gray-700 
+                   focus:border-purple-400 focus:ring-2 focus:ring-purple-500/40 
+                   outline-none transition'
         value={form.ingredients}
         onChange={(e) => setForm({ ...form, ingredients: e.target.value })}
       />
+
+      {/* Steps */}
       <textarea
-        placeholder='Steps'
-        className='border p-2 w-full'
+        placeholder='Steps (one per line)'
+        rows={4}
+        className='w-full px-4 py-3 rounded-xl bg-gray-900/70 border border-gray-700 
+                   focus:border-blue-400 focus:ring-2 focus:ring-blue-500/40 
+                   outline-none transition'
         value={form.steps}
         onChange={(e) => setForm({ ...form, steps: e.target.value })}
       />
+
+      {/* Cooking Time */}
       <input
         type='number'
         placeholder='Cooking Time (minutes)'
-        className='border p-2 w-full'
+        className='w-full px-4 py-3 rounded-xl bg-gray-900/70 border border-gray-700 
+                   focus:border-green-400 focus:ring-2 focus:ring-green-500/40 
+                   outline-none transition'
         value={form.cookingTimeMinutes}
         onChange={(e) =>
           setForm({ ...form, cookingTimeMinutes: +e.target.value })
         }
       />
+
+      {/* Submit button */}
       <button
         type='submit'
-        className='bg-green-600 text-white px-3 py-1 rounded'
+        className='w-full py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 
+                   text-white font-semibold shadow-lg shadow-green-500/30 
+                   hover:scale-[1.02] transition-transform'
       >
-        {submitLabel}
+        🚀 {submitLabel}
       </button>
     </form>
   )
