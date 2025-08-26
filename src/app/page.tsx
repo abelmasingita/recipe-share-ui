@@ -1,103 +1,113 @@
-import Image from "next/image";
+'use client'
+
+import { useState } from 'react'
+import { useRecipes } from '@/hooks/useRecipes'
+import Link from 'next/link'
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [tagInput, setTagInput] = useState('')
+  const [searchTag, setSearchTag] = useState<string | undefined>(undefined)
+  const { recipes, loading, error, handleDelete } = useRecipes(searchTag)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    setSearchTag(tagInput.trim() || undefined) // trigger fetch only on submit
+  }
+
+  return (
+    <div className='min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-gray-100 p-8'>
+      <div className='max-w-4xl mx-auto space-y-8'>
+        {/* Header */}
+        <div className='flex justify-between items-center'>
+          <h1 className='text-4xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent'>
+            Recipes
+          </h1>
+          <Link
+            href='/recipes/new'
+            className='px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:scale-105 transition'
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            + Add Recipe
+          </Link>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+
+        {/* Tag Search */}
+        <form onSubmit={handleSearch} className='flex gap-2'>
+          <input
+            type='text'
+            value={tagInput}
+            onChange={(e) => setTagInput(e.target.value)}
+            placeholder='Search by tag...'
+            className='flex-1 px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500'
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <button
+            type='submit'
+            className='px-4 py-2 rounded-lg bg-purple-600 text-white font-medium hover:bg-purple-500 transition'
+          >
+            Search
+          </button>
+          {searchTag && (
+            <button
+              type='button'
+              onClick={() => {
+                setTagInput('')
+                setSearchTag(undefined) // resets back to all recipes
+              }}
+              className='px-4 py-2 rounded-lg bg-gray-700 text-gray-300 hover:bg-gray-600 transition'
+            >
+              Clear
+            </button>
+          )}
+        </form>
+
+        {/* Recipes List */}
+        <div className='grid gap-4'>
+          {loading && (
+            <p className='text-center text-blue-400 animate-pulse'>
+              Loading...
+            </p>
+          )}
+          {error && <p className='text-red-500 text-center'>{error}</p>}
+          {!loading && !error && recipes.length === 0 && (
+            <p className='text-center text-gray-500'>No recipes found</p>
+          )}
+          {!loading &&
+            !error &&
+            recipes.map((r) => (
+              <div
+                key={r.id}
+                className='flex justify-between items-center p-5 rounded-2xl bg-gray-800/60 border border-gray-700 hover:border-purple-500/50 transition'
+              >
+                <div>
+                  <span className='block text-lg font-semibold'>{r.title}</span>
+                  <div className='mt-1 flex gap-2 flex-wrap'>
+                    {r.tags?.map((t) => (
+                      <span
+                        key={t}
+                        className='text-xs px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/30'
+                      >
+                        #{t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className='space-x-4'>
+                  <Link
+                    href={`/recipes/${r.id}`}
+                    className='text-cyan-400 hover:text-cyan-300'
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(r.id)}
+                    className='text-red-400 hover:text-red-300'
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
     </div>
-  );
+  )
 }

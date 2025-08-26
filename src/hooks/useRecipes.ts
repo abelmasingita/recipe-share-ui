@@ -4,22 +4,32 @@ import { useEffect, useState } from 'react'
 import { getRecipes, deleteRecipe } from '@/lib/api'
 import { Recipe } from '@/types/recipe'
 
-export function useRecipes() {
+
+export function useRecipes(tag?: string) {
   const [recipes, setRecipes] = useState<Recipe[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    getRecipes()
-      .then(setRecipes)
-      .catch(() => setError('Failed to load recipes'))
-      .finally(() => setLoading(false))
-  }, [])
+    async function fetchRecipes() {
+      setLoading(true)
+      try {
+        const data = await getRecipes(tag) // pass tag to API
+        setRecipes(data)
+        setError(null)
+      } catch (err) {
+        setError('Failed to load recipes')
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchRecipes()
+  }, [tag])
 
   async function handleDelete(id: string) {
     try {
       await deleteRecipe(id)
-      setRecipes((r) => r.filter((x) => x.id !== id))
+      setRecipes((prev) => prev.filter((r) => r.id !== id))
     } catch {
       setError('Failed to delete recipe')
     }
