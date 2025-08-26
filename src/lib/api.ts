@@ -2,8 +2,11 @@ import { Recipe } from '@/types/recipe'
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
 
-export async function getRecipes(): Promise<Recipe[]> {
-  const res = await fetch(`${baseUrl}/recipes`)
+export async function getRecipes(tag?: string): Promise<Recipe[]> {
+  const url = tag
+    ? `${baseUrl}/recipes?tag=${encodeURIComponent(tag)}`
+    : `${baseUrl}/recipes`
+  const res = await fetch(url, { cache: 'no-store' })
   if (!res.ok) throw new Error('Failed to fetch recipes')
   return res.json()
 }

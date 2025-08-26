@@ -55,6 +55,7 @@ export default function NewRecipe() {
         )}
 
         {/* Title */}
+        <label>Title</label>
         <input
           type='text'
           placeholder='Recipe Title'
@@ -64,6 +65,7 @@ export default function NewRecipe() {
         />
 
         {/* Ingredients */}
+        <label>Ingredients (comma separated)</label>
         <textarea
           placeholder='Ingredients (comma separated)'
           rows={4}
@@ -73,6 +75,7 @@ export default function NewRecipe() {
         />
 
         {/* Steps */}
+        <label>Steps (one per line)</label>
         <textarea
           placeholder='Steps (one per line)'
           rows={4}
@@ -82,13 +85,18 @@ export default function NewRecipe() {
         />
 
         {/* Cooking Time */}
+        <label>Cooking Time (minutes)</label>
         <input
           type='number'
+          min={1}
           placeholder='Cooking Time (minutes)'
           className='w-full px-4 py-3 rounded-xl bg-gray-900/70 border border-gray-700 focus:border-green-400 focus:ring-2 focus:ring-green-500/40 outline-none transition'
           value={form.cookingTimeMinutes}
           onChange={(e) =>
-            setForm({ ...form, cookingTimeMinutes: +e.target.value })
+            setForm({
+              ...form,
+              cookingTimeMinutes: Math.max(1, +e.target.value),
+            })
           }
         />
 
