@@ -78,7 +78,25 @@ export default function Home() {
                 className='flex justify-between items-center p-5 rounded-2xl bg-gray-800/60 border border-gray-700 hover:border-purple-500/50 transition'
               >
                 <div>
-                  <span className='block text-lg font-semibold'>{r.title}</span>
+                  <div>
+                    <span className='block text-lg font-semibold'>
+                      {r.title}
+                    </span>
+
+                    {/* Dietary Tags */}
+                    {r.dietaryTags && (
+                      <div className='mt-2 flex gap-2 flex-wrap'>
+                        {r.dietaryTags.split(',').map((tag) => (
+                          <span
+                            key={tag.trim()}
+                            className='text-xs px-2 py-1 rounded-full bg-green-600/20 text-green-300 border border-green-500/30'
+                          >
+                            {tag.trim()}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                   <div className='mt-1 flex gap-2 flex-wrap'>
                     {r.tags?.map((t) => (
                       <span
