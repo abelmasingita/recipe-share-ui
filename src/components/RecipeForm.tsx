@@ -16,6 +16,7 @@ export function RecipeForm({ initial, onSubmit, submitLabel = 'Save' }: Props) {
     steps: initial?.steps ?? '',
     cookingTimeMinutes: initial?.cookingTimeMinutes ?? 0,
     tags: initial?.tags ?? [],
+    dietaryTags: initial?.dietaryTags ?? '',
   })
 
   const [error, setError] = useState<string | null>(null)
@@ -74,6 +75,14 @@ export function RecipeForm({ initial, onSubmit, submitLabel = 'Save' }: Props) {
                    outline-none transition'
         value={form.steps}
         onChange={(e) => setForm({ ...form, steps: e.target.value })}
+      />
+
+      <label>Dietary Tags</label>
+      <textarea
+        placeholder='Dietary Tags (comma separated, e.g. Vegan, Gluten-Free)'
+        className='border p-2 w-full rounded-lg bg-gray-900/70 border-gray-700 text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-green-500/40'
+        value={form.dietaryTags}
+        onChange={(e) => setForm({ ...form, dietaryTags: e.target.value })}
       />
 
       {/* Cooking Time */}

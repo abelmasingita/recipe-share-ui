@@ -10,6 +10,7 @@ export default function NewRecipe() {
     title: '',
     ingredients: '',
     steps: '',
+    dietaryTags: '',
     cookingTimeMinutes: 0,
     tags: [] as string[],
   })
@@ -82,6 +83,14 @@ export default function NewRecipe() {
           className='w-full px-4 py-3 rounded-xl bg-gray-900/70 border border-gray-700 focus:border-blue-400 focus:ring-2 focus:ring-blue-500/40 outline-none transition'
           value={form.steps}
           onChange={(e) => setForm({ ...form, steps: e.target.value })}
+        />
+
+        <label>Dietary Tags</label>
+        <textarea
+          placeholder='Dietary Tags (comma separated, e.g. Vegan, Gluten-Free)'
+          className='border p-2 w-full rounded-lg bg-gray-900/70 border-gray-700 text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-green-500/40'
+          value={form.dietaryTags}
+          onChange={(e) => setForm({ ...form, dietaryTags: e.target.value })}
         />
 
         {/* Cooking Time */}

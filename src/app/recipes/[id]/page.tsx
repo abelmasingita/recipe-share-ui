@@ -48,7 +48,7 @@ export default function EditRecipe() {
           initial={recipe}
           onSubmit={async (data) => {
             await handleUpdate(data)
-            router.push('/recipes')
+            router.push('/')
           }}
           submitLabel='Update'
         />
